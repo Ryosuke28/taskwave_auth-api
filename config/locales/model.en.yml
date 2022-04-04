@@ -1,0 +1,10 @@
+---
+ja:
+  activerecord:
+    models:
+      user: User
+    attributes:
+      user:
+        name: Account name
+        alias: Account ailas
+        email: Email address

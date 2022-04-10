@@ -12,11 +12,7 @@ RSpec.describe User, type: :model do
 
     describe 'name' do
       context '桁数' do
-        it_behaves_like '上限値の確認', 32, 'アカウント名は32文字以内で入力してください' do
-          let(:name) { target_column }
-        end
-
-        it_behaves_like '下限値の確認', 'アカウント名は1文字以上で入力してください' do
+        it_behaves_like '上限値の確認', 50, 'アカウント名は50文字以内で入力してください' do
           let(:name) { target_column }
         end
       end
@@ -30,14 +26,8 @@ RSpec.describe User, type: :model do
 
     describe 'alias' do
       context '桁数' do
-        it_behaves_like '上限値の確認', 32, 'アカウント別名は32文字以内で入力してください' do
+        it_behaves_like '上限値の確認', 50, 'アカウント別名は50文字以内で入力してください' do
           let(:user_alias) { target_column }
-        end
-
-        context '下限値の場合' do
-          let(:user_alias) { '' }
-
-          it_behaves_like :valid_true
         end
       end
     end
@@ -45,15 +35,15 @@ RSpec.describe User, type: :model do
     describe 'email' do
       context '桁数' do
         context '上限値の場合' do
-          let(:email) { "#{'a' * 20}@example.com" }
+          let(:email) { "#{'a' * 244}@example.com" }
 
           it_behaves_like :valid_true
         end
 
         context '上限値 +1 の場合' do
-          let(:email) { "#{'a' * 21}@example.com" }
+          let(:email) { "#{'a' * 245}@example.com" }
 
-          it_behaves_like :valid_false, 'メールアドレスは32文字以内で入力してください'
+          it_behaves_like :valid_false, 'メールアドレスは256文字以内で入力してください'
         end
       end
     end

@@ -28,6 +28,7 @@ gem 'rack-cors'
 gem 'devise'
 # gem 'devise-i18n'
 gem 'jwt'
+gem 'problem_details-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

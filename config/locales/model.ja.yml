@@ -8,3 +8,5 @@ ja:
         name: アカウント名
         alias: アカウント別名
         email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）

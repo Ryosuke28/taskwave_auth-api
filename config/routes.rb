@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
       resource :users, only: [:create]
+      resource :teams, only: [:create]
 
       devise_for :users, skip: :all
       # devise_scope :user do

@@ -10,3 +10,7 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認）
+      team:
+        name: チーム名
+        description: 説明
+        personal_flag: 個人フラグ

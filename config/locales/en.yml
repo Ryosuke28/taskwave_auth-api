@@ -247,3 +247,5 @@ en:
   action:
     users:
       create: User creation process
+    teams:
+      create: Team creation process

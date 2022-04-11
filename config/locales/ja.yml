@@ -208,3 +208,5 @@ ja:
   action:
     users:
       create: ユーザー作成処理
+    teams:
+      create: チーム作成処理

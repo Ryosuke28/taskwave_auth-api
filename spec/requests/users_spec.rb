@@ -5,7 +5,6 @@ RSpec.describe "Users", type: :request do
   describe 'POST /api/v1/users' do
     subject { post api_v1_users_path, params: { user: user_params } }
 
-    let(:user_params) { FactoryBot.attributes_for(:user) }
     let(:action_name) { 'ユーザー作成処理' }
     let(:en_action_name) { 'User creation process' }
 

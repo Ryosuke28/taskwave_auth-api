@@ -36,7 +36,7 @@ RSpec.describe "Users", type: :request do
       let(:email) { '' }
       let(:error_code) { 'UAM_010001' }
       let(:error_messages) { ['メールアドレスを入力してください'] }
-      let(:en_error_messages) { ["Email can't be blank"] }
+      let(:en_error_messages) { ["Email address can't be blank"] }
 
       it_behaves_like 'ユーザーは登録されない'
       it_behaves_like '正しいエラーを返す', 400

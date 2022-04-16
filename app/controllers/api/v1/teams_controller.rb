@@ -23,7 +23,7 @@ module Api
       # チーム詳細
       # GET /api/v1/teams/:id/edit
       def edit
-        render_json @team.hash_for_display
+        render_json @team.hash_for_edit
       end
 
       # チーム更新
@@ -40,6 +40,20 @@ module Api
             error_message: @team.errors.full_messages
           }, status: :bad_request
         end
+      end
+
+      # チーム一覧
+      # GET /api/v1/teams
+      def index
+        @teams = Team.all
+
+        render_json @teams.map(&:hash_for_index)
+      end
+
+      # チーム数
+      # GET /api/v1/teams/count
+      def count
+        render_json Team.count
       end
 
       private

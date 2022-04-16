@@ -2,7 +2,9 @@ class Team < ApplicationRecord
   validates :name, presence: true, length: { maximum: 32 }
   validates :description, length: { maximum: 256 }, allow_blank: true
 
-  def hash_for_display
+  # チーム詳細用のハッシュに整形する
+  # @return [Hash] チーム情報
+  def hash_for_edit
     {
       id: id,
       name: name,
@@ -10,6 +12,17 @@ class Team < ApplicationRecord
       personal_flag: personal_flag,
       created_at: created_at.iso8601,
       updated_at: updated_at.iso8601
+    }
+  end
+
+  # チーム一覧用のハッシュに整形する
+  # @return [Hash] チーム情報
+  def hash_for_index
+    {
+      id: id,
+      name: name,
+      description: description,
+      personal_flag: personal_flag
     }
   end
 end

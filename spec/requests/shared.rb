@@ -12,10 +12,10 @@ RSpec.shared_examples '正しいエラーを返す' do |status|
   context '日本語の場合' do
     it do
       subject
-      expect(json[:title]).to eq action_name
-      expect(json[:status]).to eq status
-      expect(json[:error_code]).to eq error_code
-      expect(json[:error_message]).to eq error_messages
+      expect(json_body[:title]).to eq action_name
+      expect(json_body[:status]).to eq status
+      expect(json_body[:error_code]).to eq error_code
+      expect(json_body[:error_message]).to eq error_messages
     end
   end
 
@@ -28,10 +28,10 @@ RSpec.shared_examples '正しいエラーを返す' do |status|
 
     it do
       subject
-      expect(json[:title]).to eq en_action_name
-      expect(json[:status]).to eq status
-      expect(json[:error_code]).to eq error_code
-      expect(json[:error_message]).to eq en_error_messages
+      expect(json_body[:title]).to eq en_action_name
+      expect(json_body[:status]).to eq status
+      expect(json_body[:error_code]).to eq error_code
+      expect(json_body[:error_message]).to eq en_error_messages
     end
   end
 end

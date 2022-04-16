@@ -249,6 +249,8 @@ en:
     users:
       create: User creation process
     teams:
+      index: Team list acquisition process
+      count: Team count acquisition process
       create: Team creation process
       edit: Team detail acquisition process
       update: Team information update process

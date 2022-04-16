@@ -2,7 +2,8 @@
 ja:
   activerecord:
     models:
-      user: ユーザー
+      users: ユーザー
+      teams: チーム
     attributes:
       user:
         name: アカウント名

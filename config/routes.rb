@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
       resources :users, only: [:create]
-      resources :teams, only: [:create, :edit, :update]
+      resources :teams, only: [:create, :edit, :update, :index] do
+        collection do
+          get 'count'
+        end
+      end
 
       devise_for :users, skip: :all
       # devise_scope :user do

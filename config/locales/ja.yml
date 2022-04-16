@@ -210,6 +210,8 @@ ja:
     users:
       create: ユーザー作成処理
     teams:
+      index: チーム一覧取得処理
+      count: チーム数取得処理
       create: チーム作成処理
       edit: チーム詳細取得処理
       update: チーム情報更新処理

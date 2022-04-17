@@ -248,6 +248,8 @@ en:
   action:
     users:
       create: User creation process
+      edit: User detail acquisition process
+      update: User information update process
     teams:
       index: Team list acquisition process
       count: Team count acquisition process

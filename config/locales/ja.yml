@@ -209,6 +209,8 @@ ja:
   action:
     users:
       create: ユーザー作成処理
+      edit: ユーザー詳細取得処理
+      update: ユーザー情報更新処理
     teams:
       index: チーム一覧取得処理
       count: チーム数取得処理

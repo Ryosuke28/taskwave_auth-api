@@ -100,8 +100,7 @@ RSpec.describe "Teams", type: :request do
     context 'パラメータが揃っている場合' do
       it 'チーム情報が更新される' do
         is_expected.to eq 200
-        expect(team.reload.name).to eq name
-        expect(team).to have_attributes(team_params)
+        expect(team.reload).to have_attributes(team_params)
       end
     end
 

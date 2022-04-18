@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'requests/shared'
 
 RSpec.describe "Teams", type: :request do
+  include_context '権限デフォルトデータ作成'
+
   describe 'POST /api/v1/teams' do
     subject { post api_v1_teams_path, params: { team: team_params } }
 
@@ -178,6 +180,176 @@ RSpec.describe "Teams", type: :request do
         is_expected.to eq 200
         expect(response.body.to_i).to eq Team.count
       end
+    end
+  end
+
+  describe 'POST /api/v1/teams/:id/add_user' do
+    subject { post add_user_api_v1_team_path(id: id), params: { user: user_params } }
+
+    let(:action_name) { 'メンバー登録処理' }
+    let(:en_action_name) { 'Member registration process' }
+    let(:team) { create(:team) }
+    let(:users) { create_list(:user, 4) }
+    let(:id) { team.id }
+
+    before do
+      team
+      users
+    end
+
+    let(:user_params) do
+      [
+        { email: users[0].email, authority_id: 1 },
+        { email: users[1].email, authority_id: 2 },
+        { email: users[2].email, authority_id: 3 }
+      ]
+    end
+
+    context 'パラメータが揃っている場合' do
+      it 'メンバーが登録される' do
+        is_expected.to eq 200
+        expect(
+          UserTeam.where(team_id: team.id).pluck(:user_id, :authority_id)
+        ).to match_array [[users[0].id, 1], [users[1].id, 2], [users[2].id, 3]]
+      end
+    end
+
+    context '不正なパラメータの場合' do
+      before { UserTeam.create(user_id: users[3].id, team_id: team.id, authority_id: 1) }
+
+      let(:user_params) do
+        [
+          { email: users[0].email, authority_id: 1 },                      # 登録可能
+          { email: 'unexist_address@test.test', authority_id: 1 },         # 存在しないメールアドレス
+          { email: nil, authority_id: 2 },                                 # メールアドレスが空
+          { email: users[1].email, authority_id: Authority.last.id.next }, # 存在しない権限ID
+          { email: users[2].email, authority_id: nil },                    # 権限IDが空
+          { email: users[3].email, authority_id: 2 }                       # 登録済みメールアドレスで登録
+        ]
+      end
+      let(:error_code) { 'UAM_020401' }
+      let(:error_messages) do
+        ["アドレス：unexist_address@test.test,#{users[1].email},#{users[2].email},#{users[3].email}の招待に失敗しました"]
+      end
+      let(:en_error_messages) do
+        ["Invitation failed unexist_address@test.test,#{users[1].email},#{users[2].email},#{users[3].email}"]
+      end
+
+      it_behaves_like '正しいエラーを返す', 400
+      it '登録可能なものは登録される' do
+        is_expected.to eq 400
+        expect(
+          UserTeam.where(team_id: team.id, user_id: users[0].id).pluck(:user_id, :authority_id)
+        ).to match_array [[users[0].id, 1]]
+      end
+    end
+
+    context '存在しないIDの場合' do
+      let(:id) { Team.last.id.next }
+      let(:error_code) { 'UAM_000001' }
+      let(:error_messages) { ['チームは存在しません'] }
+      let(:en_error_messages) { ["Team not found"] }
+
+      it_behaves_like '正しいエラーを返す', 404
+    end
+  end
+
+  describe 'POST /api/v1/teams/:id/update_authority' do
+    subject { post update_authority_api_v1_team_path(id: id), params: { user: user_params } }
+
+    let(:action_name) { 'メンバー権限更新処理' }
+    let(:en_action_name) { 'Member authority update process' }
+    let(:team) { create(:team) }
+    let(:user) { create(:user) }
+    let(:id) { team.id }
+
+    before do
+      team
+      user
+      UserTeam.create(user_id: user.id, team_id: team.id, authority_id: 1)
+    end
+
+    let(:user_params) { { user_id: user.id, authority_id: 2 } }
+
+    context 'パラメータが揃っている場合' do
+      it 'メンバー権限が更新される' do
+        is_expected.to eq 200
+        expect(
+          UserTeam.where(team_id: team.id, user_id: user.id).pluck(:user_id, :authority_id)
+        ).to match_array [[user.id, 2]]
+      end
+    end
+
+    context '不正なパラメータの場合' do
+      context 'ユーザーが存在しない場合' do
+        let(:user_params) { { user_id: User.last.id.next, authority_id: 2 } }
+        let(:error_code) { 'UAM_000001' }
+        let(:error_messages) { ['チームは存在しません'] }
+        let(:en_error_messages) { ["Team not found"] }
+
+        it_behaves_like '正しいエラーを返す', 404
+      end
+
+      context '権限IDが存在しない場合' do
+        let(:user_params) { { user_id: user.id, authority_id: Authority.last.id.next } }
+        let(:error_code) { 'UAM_030501' }
+        let(:error_messages) { ['メンバーの権限更新に失敗しました'] }
+        let(:en_error_messages) { ['Failed to update member authority'] }
+
+        it_behaves_like '正しいエラーを返す', 400
+      end
+    end
+
+    context '存在しないIDの場合' do
+      let(:id) { Team.last.id.next }
+      let(:error_code) { 'UAM_000001' }
+      let(:error_messages) { ['チームは存在しません'] }
+      let(:en_error_messages) { ["Team not found"] }
+
+      it_behaves_like '正しいエラーを返す', 404
+    end
+  end
+
+  describe 'POST /api/v1/teams/:id/delete_user' do
+    subject { post delete_user_api_v1_team_path(id: id), params: { user: user_params } }
+
+    let(:action_name) { 'メンバー除外処理' }
+    let(:en_action_name) { 'Member deletion process' }
+    let(:team) { create(:team) }
+    let(:user) { create(:user) }
+    let(:id) { team.id }
+
+    before do
+      team
+      user
+      UserTeam.create(user_id: user.id, team_id: team.id, authority_id: 1)
+    end
+
+    let(:user_params) { { user_id: user.id } }
+
+    context 'パラメータが揃っている場合' do
+      it 'メンバーが除外される' do
+        expect { subject }.to change(UserTeam, :count).by(-1)
+        is_expected.to eq 200
+      end
+    end
+
+    context '不正なパラメータの場合' do
+      let(:user_params) { { id: User.last.id.next } }
+
+      it '存在しないユーザーIDでも成功レスポンスを返す' do
+        is_expected.to eq 200
+        expect { subject }.not_to change(UserTeam, :count)
+      end
+    end
+
+    context '存在しないIDの場合' do
+      let(:id) { Team.last.id.next }
+      let(:error_code) { 'UAM_000001' }
+      let(:error_messages) { ['チームは存在しません'] }
+      let(:en_error_messages) { ["Team not found"] }
+
+      it_behaves_like '正しいエラーを返す', 404
     end
   end
 end

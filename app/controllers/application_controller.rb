@@ -5,6 +5,15 @@ class ApplicationController < ActionController::API
     render json: json, status: :ok
   end
 
+  def render_problem(error_code, error_message)
+    model_name = params[:controller].split('/').last
+    render problem: {
+      title: I18n.t("action.#{model_name}.#{params[:action]}"),
+      error_code: error_code,
+      error_message: error_message
+    }, status: :bad_request
+  end
+
   # rescue ActiveRecord::RecordNotFound
   rescue_from ActiveRecord::RecordNotFound do |_exception|
     model_name = params[:controller].split('/').last

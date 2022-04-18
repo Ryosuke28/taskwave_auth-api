@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'requests/shared'
 
 RSpec.describe "Users", type: :request do
+  include_context '権限デフォルトデータ作成'
+
   describe 'POST /api/v1/users' do
     subject { post api_v1_users_path, params: { user: user_params } }
 
@@ -29,6 +31,10 @@ RSpec.describe "Users", type: :request do
       it 'ユーザーが登録される' do
         expect { subject }.to change(User, :count).by(1)
         expect(response).to have_http_status(:ok)
+      end
+
+      it '関連するインスタンスが登録される' do
+        expect { subject }.to change(Team, :count).by(1).and change(UserTeam, :count).by(1)
       end
     end
 

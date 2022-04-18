@@ -39,6 +39,9 @@ en:
           has_one: Cannot delete record because a dependent %{record} exists
           has_many: Cannot delete record because dependent %{record} exist
         record_not_found: "%{model_name} not found"
+        failed_to_add_user: "Invitation failed %{email}"
+        failed_to_update_authority: "Failed to update member authority"
+        failed_to_delete_user: "Failed to exclude member"
   date:
     abbr_day_names:
     - Sun
@@ -256,3 +259,6 @@ en:
       create: Team creation process
       edit: Team detail acquisition process
       update: Team information update process
+      add_user: Member registration process
+      update_authority: Member authority update process
+      delete_user: Member deletion process

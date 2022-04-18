@@ -64,4 +64,12 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods # FactoryBot.create を create と省略する
   config.include Requests::JsonHelpers, type: :request # request spec用ヘルパーを読み込む
+
+  config.before(:suite) do
+    DatabaseRewinder.clean_all
+  end
+
+  config.after(:each) do
+    DatabaseRewinder.clean
+  end
 end

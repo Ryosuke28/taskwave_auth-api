@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :user_teams
+  has_many :teams, through: :user_teams
+
   validates :name, presence: true, length: { maximum: 50 }
   validates :alias, length: { maximum: 50 }, allow_blank: true
   validates :email, length: { maximum: 256 }

@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_220_411_132_959) do
+ActiveRecord::Schema.define(version: 20_220_417_123_148) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authorities", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "alias"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "teams", force: :cascade do |t|
     t.string "name", null: false
@@ -20,6 +28,18 @@ ActiveRecord::Schema.define(version: 20_220_411_132_959) do
     t.boolean "personal_flag", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_teams", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "authority_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["authority_id"], name: "index_user_teams_on_authority_id"
+    t.index ["team_id"], name: "index_user_teams_on_team_id"
+    t.index %w[user_id team_id], name: "index_user_teams_on_user_id_and_team_id", unique: true
+    t.index ["user_id"], name: "index_user_teams_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -36,4 +56,8 @@ ActiveRecord::Schema.define(version: 20_220_411_132_959) do
     t.index ["name"], name: "index_users_on_name", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "user_teams", "authorities"
+  add_foreign_key "user_teams", "teams"
+  add_foreign_key "user_teams", "users"
 end

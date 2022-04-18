@@ -6,10 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create!(
+User.first_or_create(
   email: 'test@example.com',
   name: 'test',
   alias: 'test',
   password: 'P@ssw0rd',
   password_confirmation: 'P@ssw0rd'
 )
+
+Authority.first_or_create([
+                            { id: 1, name: 'normal', alias: '一般', description: '権限なし' },
+                            { id: 2, name: 'admin', alias: '管理者', description: '全てのタスク作成・編集・削除、タスクのアサイン' },
+                            { id: 3, name: 'owner', alias: '所有者', description: '管理者の権限全て、テーブルの削除' }
+                          ])

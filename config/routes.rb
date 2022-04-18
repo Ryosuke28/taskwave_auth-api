@@ -6,6 +6,11 @@ Rails.application.routes.draw do
         collection do
           get 'count'
         end
+        member do
+          post 'add_user'
+          post 'delete_user'
+          post 'update_authority'
+        end
       end
 
       devise_for :users, skip: :all

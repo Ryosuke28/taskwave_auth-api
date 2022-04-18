@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'requests/shared'
 
 RSpec.describe "Teams", type: :request do
+  include_context '権限デフォルトデータ作成'
+
   describe 'POST /api/v1/teams' do
     subject { post api_v1_teams_path, params: { team: team_params } }
 
@@ -193,9 +195,6 @@ RSpec.describe "Teams", type: :request do
     before do
       team
       users
-      create(:authority, :normal)
-      create(:authority, :admin)
-      create(:authority, :owner)
     end
 
     let(:user_params) do
@@ -267,9 +266,6 @@ RSpec.describe "Teams", type: :request do
     before do
       team
       user
-      create(:authority, :normal)
-      create(:authority, :admin)
-      create(:authority, :owner)
       UserTeam.create(user_id: user.id, team_id: team.id, authority_id: 1)
     end
 
@@ -326,9 +322,6 @@ RSpec.describe "Teams", type: :request do
     before do
       team
       user
-      create(:authority, :normal)
-      create(:authority, :admin)
-      create(:authority, :owner)
       UserTeam.create(user_id: user.id, team_id: team.id, authority_id: 1)
     end
 

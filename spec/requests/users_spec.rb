@@ -13,12 +13,14 @@ RSpec.describe "Users", type: :request do
     let(:user_params) do
       {
         name: name,
+        alias: name_alias,
         email: email,
         password: password,
         password_confirmation: password_confirmation
       }
     end
     let(:name) { 'test1' }
+    let(:name_alias) { 'test1_alias' }
     let(:email) { 'test1@example.com' }
     let(:password) { 'password' }
     let(:password_confirmation) { 'password' }

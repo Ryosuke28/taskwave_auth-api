@@ -78,7 +78,7 @@ module Api
       # rubocop:enable Metrics/AbcSize
 
       # チームユーザーの権限変更
-      # GET /api/v1/teams/:id/update_authority
+      # PATCH /api/v1/teams/:id/update_authority
       def update_authority
         user_team = UserTeam.find_by(user_id: params.dig(:user, :user_id), team_id: @team.id)
         raise ActiveRecord::RecordNotFound if user_team.nil?
@@ -102,6 +102,14 @@ module Api
         else
           render_problem('UAM_020501', [I18n.t('activerecord.errors.messages.failed_to_delete_user')])
         end
+      end
+
+      # チームユーザーの権限取得
+      # GET /api/v1/teams/user_authority
+      def user_authority
+        user_team = UserTeam.find_by(user_id: params[:user_id], team_id: params[:team_id])
+
+        render_json({ authority: user_team&.authority&.name.to_s })
       end
 
       private

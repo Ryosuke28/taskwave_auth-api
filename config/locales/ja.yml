@@ -223,3 +223,4 @@ ja:
       add_user: メンバー登録処理
       update_authority: メンバー権限更新処理
       delete_user: メンバー除外処理
+      user_authority: ユーザー権限取得処理

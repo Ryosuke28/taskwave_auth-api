@@ -262,3 +262,4 @@ en:
       add_user: Member registration process
       update_authority: Member authority update process
       delete_user: Member deletion process
+      user_authority: User authority acquisition process

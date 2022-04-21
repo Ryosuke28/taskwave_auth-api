@@ -352,4 +352,65 @@ RSpec.describe "Teams", type: :request do
       it_behaves_like '正しいエラーを返す', 404
     end
   end
+
+  describe 'POST /api/v1/teams/user_authority' do
+    subject { get user_authority_api_v1_teams_path, params: user_params }
+
+    let(:user_params) { { user_id: target_user.id, team_id: team.id } }
+
+    let(:team) { create(:team) }
+    let(:target_user) { normal_user }
+    let(:normal_user) { create(:user) }
+    let(:admin_user) { create(:user) }
+    let(:owner_user) { create(:user) }
+
+    before do
+      create(:user_team, user: normal_user, team: team, authority: Authority.first)
+      create(:user_team, user: admin_user, team: team, authority: Authority.second)
+      create(:user_team, user: owner_user, team: team, authority: Authority.third)
+    end
+
+    context '一般ユーザーの場合' do
+      it do
+        is_expected.to eq 200
+        expect(json_body).to eq({ authority: 'normal' })
+      end
+    end
+
+    context '管理ユーザーの場合' do
+      let(:target_user) { admin_user }
+
+      it do
+        is_expected.to eq 200
+        expect(json_body).to eq({ authority: 'admin' })
+      end
+    end
+
+    context '所有ユーザーの場合' do
+      let(:target_user) { owner_user }
+
+      it do
+        is_expected.to eq 200
+        expect(json_body).to eq({ authority: 'owner' })
+      end
+    end
+
+    context 'ユーザーが存在しない場合' do
+      let(:user_params) { { user_id: User.last.id.next, team_id: team.id } }
+
+      it do
+        is_expected.to eq 200
+        expect(json_body).to eq({ authority: '' })
+      end
+    end
+
+    context 'チームが存在しない場合' do
+      let(:user_params) { { user_id: normal_user.id, team_id: Team.last.id.next } }
+
+      it do
+        is_expected.to eq 200
+        expect(json_body).to eq({ authority: '' })
+      end
+    end
+  end
 end

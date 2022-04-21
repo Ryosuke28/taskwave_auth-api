@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :teams, only: [:create, :edit, :update, :index] do
         collection do
           get 'count'
+          get 'user_authority'
         end
         member do
           post 'add_user'

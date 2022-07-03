@@ -4,7 +4,7 @@ module Api
       before_action :authenticate_request!, only: [:show]
       before_action :find_user, only: [:edit, :update]
 
-      # ユーザー作成
+      # ユーザー作成、コントローラ番号：0101
       # POST /api/v1/users
       # コントローラ番号：01
       def create
@@ -15,19 +15,19 @@ module Api
         else
           render problem: {
             title: I18n.t('action.users.create'),
-            error_code: 'UAM_010001',
+            error_code: 'UAM_010101',
             error_message: user.errors.full_messages
           }, status: :bad_request
         end
       end
 
-      # ユーザー詳細
+      # ユーザー詳細、コントローラ番号：0102
       # GET /api/v1/users/:id/edit
       def edit
         render_json @user.hash_for_edit
       end
 
-      # ユーザー更新
+      # ユーザー更新、コントローラ番号：0103
       # PATCH /api/v1/users/:id
       def update
         @user.assign_attributes(user_params)
@@ -37,7 +37,7 @@ module Api
         else
           render problem: {
             title: I18n.t('action.users.update'),
-            error_code: 'UAM_020301',
+            error_code: 'UAM_010301',
             error_message: @user.errors.full_messages
           }, status: :bad_request
         end

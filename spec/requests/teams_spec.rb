@@ -34,7 +34,7 @@ RSpec.describe "Teams", type: :request do
 
     context 'パラメータが不足している場合' do
       let(:name) { '' }
-      let(:error_code) { 'UAM_020001' }
+      let(:error_code) { 'UAM_020101' }
       let(:error_messages) { ['チーム名を入力してください'] }
       let(:en_error_messages) { ["Name can't be blank"] }
 
@@ -227,7 +227,7 @@ RSpec.describe "Teams", type: :request do
           { email: users[3].email, authority_id: 2 }                       # 登録済みメールアドレスで登録
         ]
       end
-      let(:error_code) { 'UAM_020401' }
+      let(:error_code) { 'UAM_020601' }
       let(:error_messages) do
         ["アドレス：unexist_address@test.test,#{users[1].email},#{users[2].email},#{users[3].email}の招待に失敗しました"]
       end
@@ -292,7 +292,7 @@ RSpec.describe "Teams", type: :request do
 
       context '権限IDが存在しない場合' do
         let(:user_params) { { user_id: user.id, authority_id: Authority.last.id.next } }
-        let(:error_code) { 'UAM_030501' }
+        let(:error_code) { 'UAM_020701' }
         let(:error_messages) { ['メンバーの権限更新に失敗しました'] }
         let(:en_error_messages) { ['Failed to update member authority'] }
 

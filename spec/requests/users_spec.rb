@@ -42,7 +42,7 @@ RSpec.describe "Users", type: :request do
 
     context 'パラメータが不足している場合' do
       let(:email) { '' }
-      let(:error_code) { 'UAM_010001' }
+      let(:error_code) { 'UAM_010101' }
       let(:error_messages) { ['メールアドレスを入力してください'] }
       let(:en_error_messages) { ["Email address can't be blank"] }
 
@@ -53,7 +53,7 @@ RSpec.describe "Users", type: :request do
     context 'パスワードとパスワード（確認）が一致しない場合' do
       let(:password) { 'password' }
       let(:password_confirmation) { 'password1' }
-      let(:error_code) { 'UAM_010001' }
+      let(:error_code) { 'UAM_010101' }
       let(:error_messages) { ['パスワード（確認）とパスワードの入力が一致しません'] }
       let(:en_error_messages) { ["Password confirmation doesn't match Password"] }
 
@@ -138,7 +138,7 @@ RSpec.describe "Users", type: :request do
 
     context 'パラメータが不足している場合' do
       let(:name) { '' }
-      let(:error_code) { 'UAM_020301' }
+      let(:error_code) { 'UAM_010301' }
       let(:error_messages) { ['アカウント名を入力してください'] }
       let(:en_error_messages) { ["Account name can't be blank"] }
 

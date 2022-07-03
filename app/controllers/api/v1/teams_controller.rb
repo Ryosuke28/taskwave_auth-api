@@ -3,9 +3,8 @@ module Api
     class TeamsController < ApplicationController
       before_action :find_team, only: [:edit, :update, :add_user, :update_authority, :delete_user]
 
-      # チーム作成
+      # チーム作成、コントローラ番号：0201
       # POST /api/v1/teams
-      # コントローラ番号：02
       def create
         team = Team.new(team_params)
 
@@ -14,19 +13,19 @@ module Api
         else
           render problem: {
             title: I18n.t('action.teams.create'),
-            error_code: 'UAM_020001',
+            error_code: 'UAM_020101',
             error_message: team.errors.full_messages
           }, status: :bad_request
         end
       end
 
-      # チーム詳細
+      # チーム詳細、コントローラ番号：0202
       # GET /api/v1/teams/:id/edit
       def edit
         render_json @team.hash_for_edit
       end
 
-      # チーム更新
+      # チーム更新、コントローラ番号：0203
       # POST /api/v1/teams/:id
       def update
         @team.assign_attributes(team_params)
@@ -42,7 +41,7 @@ module Api
         end
       end
 
-      # チーム一覧
+      # チーム一覧、コントローラ番号：0204
       # GET /api/v1/teams
       def index
         @teams = Team.all
@@ -50,14 +49,14 @@ module Api
         render_json @teams.map(&:hash_for_index)
       end
 
-      # チーム数
+      # チーム数、コントローラ番号：0205
       # GET /api/v1/teams/count
       def count
         render_json Team.count
       end
 
       # rubocop:disable Metrics/AbcSize
-      # チームにユーザー登録
+      # チームにユーザー登録、コントローラ番号：0206
       # GET /api/v1/teams/:id/add_user
       def add_user
         errors_address = []
@@ -71,13 +70,13 @@ module Api
         if errors_address.blank?
           render_json({})
         else
-          render_problem('UAM_020401',
+          render_problem('UAM_020601',
                          [I18n.t('activerecord.errors.messages.failed_to_add_user', email: errors_address.join(','))])
         end
       end
       # rubocop:enable Metrics/AbcSize
 
-      # チームユーザーの権限変更
+      # チームユーザーの権限変更、コントローラ番号：0207
       # PATCH /api/v1/teams/:id/update_authority
       def update_authority
         user_team = UserTeam.find_by(user_id: params.dig(:user, :user_id), team_id: @team.id)
@@ -88,11 +87,11 @@ module Api
         if user_team.save
           render_json({})
         else
-          render_problem('UAM_030501', [I18n.t('activerecord.errors.messages.failed_to_update_authority')])
+          render_problem('UAM_020701', [I18n.t('activerecord.errors.messages.failed_to_update_authority')])
         end
       end
 
-      # チームからユーザー削除
+      # チームからユーザー削除、コントローラ番号：0208
       # GET /api/v1/teams/:id/delete_user
       def delete_user
         user_team = UserTeam.find_by(user_id: params.dig(:user, :user_id), team_id: @team.id)
@@ -104,7 +103,7 @@ module Api
         end
       end
 
-      # チームユーザーの権限取得
+      # チームユーザーの権限取得、コントローラ番号：0209
       # GET /api/v1/teams/user_authority
       def user_authority
         user_team = UserTeam.find_by(user_id: params[:user_id], team_id: params[:team_id])
